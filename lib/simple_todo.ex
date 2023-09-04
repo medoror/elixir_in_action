@@ -2,7 +2,15 @@ defmodule TodoList do
 
   defstruct next_id: 1, entries: %{}
 
-  def new(), do: %TodoList{}
+  def new(entries \\ []) do
+    Enum.reduce(
+      entries,
+      %TodoList{},
+      fn entry, todo_list_acc ->
+        add_entry(todo_list_acc, entry)
+      end
+    )
+  end
 
 
   def add_entry(todo_list, entry) do
