@@ -1,12 +1,25 @@
 defmodule TodoList do
-  def new(), do: MultiDict.new()
+
+  defstruct next_id: 1, entries: %{}
+
+  def new(), do: %TodoList{}
+
 
   def add_entry(todo_list, entry) do
-    MultiDict.add(todo_list, entry.date, entry)
+    entry = Map.put(entry, :id, todo_list.next_id)
+    # Add the new entry to the collection.
+    new_entries = Map.put(todo_list.entries,
+    todo_list.next_id,
+    entry)
+    #Increment the next_id field.
+    %TodoList{todo_list |
+      entries: new_entries,
+      next_id: todo_list.next_id + 1
+    }
   end
 
   def entries(todo_list, date) do
-    MultiDict.entries(todo_list, date)
+    todo_list.entries |> Map.values() |> Enum.filter(fn entry -> entry.date == date end)
   end
 end
 
